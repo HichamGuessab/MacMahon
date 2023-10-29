@@ -2,7 +2,7 @@
 #include "fichier.h"
 
 Fichier::Fichier(string path) {
-    this->path = path;
+    this->path = this->path + path;
 }
 
 vector<string> Fichier::readFile() {
@@ -14,6 +14,7 @@ vector<string> Fichier::readFile() {
         while(getline(file, ligne)) {
             fichier.push_back(ligne);
         }
+        file.close();
     }
     else {
         cout << "ERROR: Impossible d'ouvrir le fichier en lecture." << endl;
