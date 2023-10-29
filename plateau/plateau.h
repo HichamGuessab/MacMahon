@@ -12,6 +12,8 @@ public:
     void afficher();
     void remplir();
     Tuile getTuile(int row, int column);
+    Tuile &getTuileAddress(int row, int column);
+    void switchTuiles(Tuile &tuileA, Tuile &tuileB);
 
 private:
     int rows_;

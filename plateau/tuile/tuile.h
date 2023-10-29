@@ -10,15 +10,22 @@ class Tuile {
 public:
     Tuile();
     Tuile(char gauche, char haut, char droite, char bas);
-    void afficher();
-    void afficherLigneHaut();
-    void afficherLigneMilieu();
-    void afficherLigneBas();
+    Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas, int row, int column);
+
     vector<string> getCouleurs();
+
     char getCouleurGauche();
     char getCouleurHaut();
     char getCouleurDroite();
     char getCouleurBas();
+
+    vector<int> getPlacement();
+
+    void afficher();
+    void afficherLigneHaut();
+    void afficherLigneMilieu();
+    void afficherLigneBas();
+
 private:
     char couleurGauche;
     char couleurHaut;
@@ -35,6 +42,8 @@ private:
             {'G', "\x1B[32m"},
             {'B', "\x1B[34m"}
     };
+
+    vector<int> placement_ = {0, 0};
 };
 
 #endif // MACMAHON_TUILE_H

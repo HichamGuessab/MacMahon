@@ -6,6 +6,9 @@ Tuile::Tuile() {
     this->couleurANSIHaut = couleursANSI['N'];
     this->couleurANSIDroite = couleursANSI['N'];
     this->couleurANSIBas = couleursANSI['N'];
+
+    this->placement_[0] = 0;
+    this->placement_[1] = 0;
 }
 
 Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas) {
@@ -18,6 +21,21 @@ Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char coul
     this->couleurANSIHaut = couleursANSI[couleurHaut];
     this->couleurANSIDroite = couleursANSI[couleurDroite];
     this->couleurANSIBas = couleursANSI[couleurBas];
+}
+
+Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas, int row, int column) {
+    this->couleurGauche = couleurGauche;
+    this->couleurHaut = couleurHaut;
+    this->couleurDroite = couleurDroite;
+    this->couleurBas = couleurBas;
+
+    this->couleurANSIGauche = couleursANSI[couleurGauche];
+    this->couleurANSIHaut = couleursANSI[couleurHaut];
+    this->couleurANSIDroite = couleursANSI[couleurDroite];
+    this->couleurANSIBas = couleursANSI[couleurBas];
+
+    this->placement_[0] = row;
+    this->placement_[1] = column;
 }
 
 void Tuile::afficher() {
@@ -70,4 +88,8 @@ char Tuile::getCouleurDroite() {
 
 char Tuile::getCouleurBas() {
     return this->couleurBas;
+}
+
+vector<int> Tuile::getPlacement() {
+    return this->placement_;
 }

@@ -12,12 +12,17 @@ Plateau::Plateau(vector<string> fichier) {
 
 void Plateau::remplir() {
     vector<Tuile> lignesTuile = vector<Tuile>();
+    int ligne = 0;
+    int colonne = 0;
     for (int i = 1; i < (this->rows_ * this->columns_) + 1; i++) {
-        Tuile tuile = Tuile(this->fichier_[i][0], this->fichier_[i][2], this->fichier_[i][4], this->fichier_[i][6]);
+        Tuile tuile = Tuile(this->fichier_[i][0], this->fichier_[i][2], this->fichier_[i][4], this->fichier_[i][6], ligne, colonne);
         lignesTuile.push_back(tuile);
+        colonne++;
         if (i % this->columns_ == 0) {
             this->plateau_.push_back(lignesTuile);
             lignesTuile.clear();
+            ligne ++;
+            colonne = 0;
         }
     }
 }
@@ -48,4 +53,14 @@ void Plateau::afficher() {
 
 Tuile Plateau::getTuile(int row, int column) {
     return this->plateau_[row][column];
+}
+
+Tuile& Plateau::getTuileAddress(int row, int column) {
+    return this->plateau_[row][column];
+}
+
+void Plateau::switchTuiles(Tuile &tuileA, Tuile &tuileB) {
+    Tuile temp = tuileA;
+    tuileA = tuileB;
+    tuileB = temp;
 }

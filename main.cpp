@@ -14,7 +14,12 @@ int main() {
     plateau.remplir();
     plateau.afficher();
 
-    plateau.getTuile(0, 0).afficher();
-    cout << plateau.getTuile(0, 0).getCouleurDroite() << endl;
+    cout << endl;
+    cout << endl;
+
+    plateau.switchTuiles(plateau.getTuileAddress(0, 0), plateau.getTuileAddress(0, 1));
+
+    plateau.afficher();
+
     return 0;
 }
