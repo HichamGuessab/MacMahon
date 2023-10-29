@@ -1,8 +1,8 @@
 #ifndef MACMAHON_PLATEAU_H
 #define MACMAHON_PLATEAU_H
 
-#include "fichier.h"
-#include "tuile.h"
+#include "../fichier/fichier.h"
+#include "tuile/tuile.h"
 
 using namespace std;
 
