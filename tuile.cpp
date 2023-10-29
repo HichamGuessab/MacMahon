@@ -1,8 +1,14 @@
 #include "tuile.h"
 #include "iostream"
 
+Tuile::Tuile() {
+    this->couleurGauche = couleurs['N'];
+    this->couleurHaut = couleurs['N'];
+    this->couleurDroite = couleurs['N'];
+    this->couleurBas = couleurs['N'];
+}
+
 Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas) {
-    // Pour chaque couleur, on associe son ANSI
     this->couleurGauche = couleurs[couleurGauche];
     this->couleurHaut = couleurs[couleurHaut];
     this->couleurDroite = couleurs[couleurDroite];
@@ -10,15 +16,36 @@ Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char coul
 }
 
 void Tuile::afficher() {
-    // On remet la couleur par défaut si la couleur donné en argument n'est pas bonne
-    cout << this-> couleurs['N'] << "██";
-    cout << this->couleurHaut << "██" << couleurs['N'];
-    cout << this-> couleurs['N'] << "██" << endl;
-    cout << this->couleurGauche << "██" << couleurs['N'];
-    cout << this-> couleurs['N'] << "██";
-    cout << this->couleurDroite << "██" << couleurs['N'] << endl;
-    cout << this-> couleurs['N'] << "██";
-    cout << this->couleurBas << "██" << couleurs['N'];
-    cout << this-> couleurs['N'] << "██" << endl;
+    afficherLigneHaut();
+    cout << endl;
+    afficherLigneMilieu();
+    cout << endl;
+    afficherLigneBas();
 }
 
+void Tuile::afficherLigneHaut() {
+    cout << this-> couleurs['N'] <<"   ";
+    cout << this->couleurHaut << "███" << couleurs['N'];
+    cout << this-> couleurs['N'] <<"   ";
+}
+
+void Tuile::afficherLigneMilieu() {
+    cout << this->couleurGauche << "███" << couleurs['N'];
+    cout << this-> couleurs['N'] <<"   ";
+    cout << this->couleurDroite << "███" << couleurs['N'];
+}
+
+void Tuile::afficherLigneBas() {
+    cout << this-> couleurs['N'] <<"   ";
+    cout << this->couleurBas << "███" << couleurs['N'];
+    cout << this-> couleurs['N'] <<"   ";
+};
+
+vector<string> Tuile::getCouleurs() {
+vector<string> couleursTuile;
+    couleursTuile.push_back(this->couleurGauche);
+    couleursTuile.push_back(this->couleurHaut);
+    couleursTuile.push_back(this->couleurDroite);
+    couleursTuile.push_back(this->couleurBas);
+    return couleursTuile;
+}

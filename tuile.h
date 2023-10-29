@@ -8,8 +8,13 @@ using namespace std;
 
 class Tuile {
 public:
+    Tuile();
     Tuile(char gauche, char haut, char droite, char bas);
     void afficher();
+    void afficherLigneHaut();
+    void afficherLigneMilieu();
+    void afficherLigneBas();
+    vector<string> getCouleurs();
 private:
     string couleurGauche;
     string couleurHaut;

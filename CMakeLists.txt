@@ -5,4 +5,6 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(MacMahon main.cpp
         fichier.cpp
-        tuile.cpp)
+        tuile.cpp
+        plateau.h
+        plateau.cpp)
