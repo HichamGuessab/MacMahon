@@ -4,4 +4,5 @@ project(MacMahon)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(MacMahon main.cpp
-        fichier.cpp)
+        fichier.cpp
+        tuile.cpp)

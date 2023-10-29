@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "fichier.h"
+#include "tuile.h"
 
 using namespace std;
 
@@ -10,5 +11,8 @@ int main() {
     Fichier fichier(directory + "5_5.txt");
     vector<string> file = fichier.readFile();
     cout << file[0] << endl;
+
+    Tuile maTuile('G', 'B', 'R', 'G');
+    maTuile.afficher();
     return 0;
 }
