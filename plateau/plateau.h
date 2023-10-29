@@ -11,6 +11,7 @@ public:
     Plateau(vector<string> fichier);
     void afficher();
     void remplir();
+    Tuile getTuile(int row, int column);
 
 private:
     int rows_;

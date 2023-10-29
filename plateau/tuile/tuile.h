@@ -15,12 +15,21 @@ public:
     void afficherLigneMilieu();
     void afficherLigneBas();
     vector<string> getCouleurs();
+    char getCouleurGauche();
+    char getCouleurHaut();
+    char getCouleurDroite();
+    char getCouleurBas();
 private:
-    string couleurGauche;
-    string couleurHaut;
-    string couleurDroite;
-    string couleurBas;
-    map<char, string> couleurs = {
+    char couleurGauche;
+    char couleurHaut;
+    char couleurDroite;
+    char couleurBas;
+
+    string couleurANSIGauche;
+    string couleurANSIHaut;
+    string couleurANSIDroite;
+    string couleurANSIBas;
+    map<char, string> couleursANSI = {
             {'N', "\x1B[0m"},
             {'R', "\x1B[31m"},
             {'G', "\x1B[32m"},

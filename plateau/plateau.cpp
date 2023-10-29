@@ -45,3 +45,7 @@ void Plateau::afficher() {
         cout << endl;
     }
 }
+
+Tuile Plateau::getTuile(int row, int column) {
+    return this->plateau_[row][column];
+}

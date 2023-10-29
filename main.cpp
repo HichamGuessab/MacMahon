@@ -13,5 +13,8 @@ int main() {
     Plateau plateau(file);
     plateau.remplir();
     plateau.afficher();
+
+    plateau.getTuile(0, 0).afficher();
+    cout << plateau.getTuile(0, 0).getCouleurDroite() << endl;
     return 0;
 }
