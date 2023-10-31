@@ -10,16 +10,28 @@ class Plateau {
 public:
     Plateau(vector<string> fichier);
     void afficher();
-    void remplir();
-    Tuile getTuile(int row, int column);
-    Tuile &getTuileAddress(int row, int column);
-    void switchTuiles(Tuile &tuileA, Tuile &tuileB);
+    void afficherListeTuiles();
+    void remplirListeTuiles(vector<string> fichier);
+    void pushTuile(int index);
+    void popTuile(int row);
 
 private:
-    int rows_;
-    int columns_;
-    vector<string> fichier_;
+
+    int totalRows_;
+    int totalColumns_;
+
+    vector<Tuile> listeTuiles_;
     vector<vector<Tuile>> plateau_;
+
+    // Tuile sélectionnée dans la liste des tuiles
+    Tuile selectedTuile_;
+    int selectedTuileIterator_;
+
+    // Tuile actuelle dans le plateau
+    Tuile currentTuile_;
+    int currentRow_;
+    int currentColumn_;
+
 };
 
 #endif // MACMAHON_PLATEAU_H

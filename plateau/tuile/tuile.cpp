@@ -2,13 +2,15 @@
 #include "iostream"
 
 Tuile::Tuile() {
+    this->couleurGauche = 'N';
+    this->couleurHaut = 'N';
+    this->couleurDroite = 'N';
+    this->couleurBas = 'N';
+
     this->couleurANSIGauche = couleursANSI['N'];
     this->couleurANSIHaut = couleursANSI['N'];
     this->couleurANSIDroite = couleursANSI['N'];
     this->couleurANSIBas = couleursANSI['N'];
-
-    this->placement_[0] = 0;
-    this->placement_[1] = 0;
 }
 
 Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas) {
@@ -33,9 +35,6 @@ Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char coul
     this->couleurANSIHaut = couleursANSI[couleurHaut];
     this->couleurANSIDroite = couleursANSI[couleurDroite];
     this->couleurANSIBas = couleursANSI[couleurBas];
-
-    this->placement_[0] = row;
-    this->placement_[1] = column;
 }
 
 void Tuile::afficher() {
@@ -44,7 +43,7 @@ void Tuile::afficher() {
     afficherLigneMilieu();
     cout << endl;
     afficherLigneBas();
-    cout << endl;
+    cout << endl << endl;
 }
 
 void Tuile::afficherLigneHaut() {
@@ -90,6 +89,9 @@ char Tuile::getCouleurBas() {
     return this->couleurBas;
 }
 
-vector<int> Tuile::getPlacement() {
-    return this->placement_;
+bool Tuile::isTuileVide() {
+    return this->couleurGauche == 'N' &&
+           this->couleurHaut == 'N' &&
+           this->couleurDroite == 'N' &&
+           this->couleurBas == 'N';
 }

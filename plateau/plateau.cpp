@@ -4,46 +4,46 @@
 using namespace std;
 
 Plateau::Plateau(vector<string> fichier) {
-    this->fichier_ = fichier;
-    this->rows_ = fichier[0][0] - '0';
-    this->columns_ = fichier[0][2] - '0';
-    this->plateau_ = vector<vector<Tuile>>();
+    // Le - '0' permet de convertir le char en int
+    this->totalRows_ = fichier[0][0] - '0';
+    this->totalColumns_ = fichier[0][2] - '0';
+    this->currentRow_ = 0;
+    this->currentColumn_ = 0;
+    this->listeTuiles_ = vector<Tuile>();
+    this->plateau_ = vector<vector<Tuile>>(this->totalRows_, vector<Tuile>(this->totalColumns_));
+    remplirListeTuiles(fichier);
 }
 
-void Plateau::remplir() {
-    vector<Tuile> lignesTuile = vector<Tuile>();
-    int ligne = 0;
-    int colonne = 0;
-    for (int i = 1; i < (this->rows_ * this->columns_) + 1; i++) {
-        Tuile tuile = Tuile(this->fichier_[i][0], this->fichier_[i][2], this->fichier_[i][4], this->fichier_[i][6], ligne, colonne);
-        lignesTuile.push_back(tuile);
-        colonne++;
-        if (i % this->columns_ == 0) {
-            this->plateau_.push_back(lignesTuile);
-            lignesTuile.clear();
-            ligne ++;
-            colonne = 0;
-        }
+void Plateau::remplirListeTuiles(vector<string> fichier) {
+    for (int i = 1; i < (this->totalRows_ * this->totalColumns_) + 1; i++) {
+        Tuile tuile = Tuile(fichier[i][0], fichier[i][2], fichier[i][4], fichier[i][6]);
+        this->listeTuiles_.push_back(tuile);
     }
+}
+
+void Plateau::afficherListeTuiles() {
+    int nombre_tuile = 0;
+    for (int i = 0; i < this->listeTuiles_.size(); i++) {
+        this->listeTuiles_[i].afficher();
+        nombre_tuile++;
+    }
+    cout << "Nombre de tuiles : " << nombre_tuile << endl;
 }
 
 void Plateau::afficher() {
-    for (int i = 0; i < this->rows_; i++) {
-        for (int j = 0; j < this->columns_; j++) {
-            Tuile currentTuile = this->plateau_[i][j];
-            currentTuile.afficherLigneHaut();
+    for (int i = 0; i < this->totalRows_; i++) {
+        for (int j = 0; j < this->totalColumns_; j++) {
+            this->plateau_[i][j].afficherLigneHaut();
             cout << "  ";
         }
         cout << endl;
-        for (int j = 0; j < this->columns_; j++) {
-            Tuile currentTuile = this->plateau_[i][j];
-            currentTuile.afficherLigneMilieu();
+        for (int j = 0; j < this->totalColumns_; j++) {
+            this->plateau_[i][j].afficherLigneMilieu();
             cout << "  ";
         }
         cout << endl;
-        for (int j = 0; j < this->columns_; j++) {
-            Tuile currentTuile = this->plateau_[i][j];
-            currentTuile.afficherLigneBas();
+        for (int j = 0; j < this->totalColumns_; j++) {
+            this->plateau_[i][j].afficherLigneBas();
             cout << "  ";
         }
         cout << endl;
@@ -51,16 +51,14 @@ void Plateau::afficher() {
     }
 }
 
-Tuile Plateau::getTuile(int row, int column) {
-    return this->plateau_[row][column];
-}
-
-Tuile& Plateau::getTuileAddress(int row, int column) {
-    return this->plateau_[row][column];
-}
-
-void Plateau::switchTuiles(Tuile &tuileA, Tuile &tuileB) {
-    Tuile temp = tuileA;
-    tuileA = tuileB;
-    tuileB = temp;
+void Plateau::pushTuile(int index) {
+    cout << "index : " << index << endl;
+    cout << "currentRow : " << currentRow_ << endl;
+    cout << "currentColumn : " << currentColumn_ << endl;
+    this->plateau_[this->currentRow_][this->currentColumn_] = this->listeTuiles_[index];
+    this->currentRow_++;
+    if (this->currentRow_ == this->totalRows_) {
+        this->currentRow_ = 0;
+        this->currentColumn_++;
+    }
 }

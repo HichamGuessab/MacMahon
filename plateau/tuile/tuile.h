@@ -26,6 +26,8 @@ public:
     void afficherLigneMilieu();
     void afficherLigneBas();
 
+    bool isTuileVide();
+
 private:
     char couleurGauche;
     char couleurHaut;
@@ -42,8 +44,6 @@ private:
             {'G', "\x1B[32m"},
             {'B', "\x1B[34m"}
     };
-
-    vector<int> placement_ = {0, 0};
 };
 
 #endif // MACMAHON_TUILE_H

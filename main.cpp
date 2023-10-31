@@ -11,14 +11,11 @@ int main() {
     vector<string> file = fichier.readFile();
 
     Plateau plateau(file);
-    plateau.remplir();
-    plateau.afficher();
+    plateau.afficherListeTuiles();
 
     cout << endl;
-    cout << endl;
 
-    plateau.switchTuiles(plateau.getTuileAddress(0, 0), plateau.getTuileAddress(0, 1));
-
+    plateau.pushTuile(0);
     plateau.afficher();
 
     return 0;
