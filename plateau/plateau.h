@@ -32,6 +32,9 @@ private:
     int currentRow_;
     int currentColumn_;
 
+    int nextRow_;
+    int nextColumn_;
+
     Tuile defaultTuile_ = Tuile();
 };
 
