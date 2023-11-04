@@ -16,6 +16,12 @@ public:
     void popTuile(int row, int column);
     Tuile getCurrentTuile();
 
+    bool verifyTuile();
+    bool verifyTuileForAngle();
+    bool verifyCouleursBordure();
+    bool verifyCouleursAngles();
+    bool verifyCouleursVoisins();
+
 private:
     int totalRows_;
     int totalColumns_;
@@ -36,6 +42,8 @@ private:
     int nextColumn_;
 
     Tuile defaultTuile_ = Tuile();
+
+    char bordureCouleur = 'N';
 };
 
 #endif // MACMAHON_PLATEAU_H

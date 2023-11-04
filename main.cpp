@@ -13,18 +13,14 @@ int main() {
     Plateau plateau(file);
     plateau.afficherListeTuiles();
 
-    cout << endl;
-
-    plateau.pushTuile(0);
+    for (int i = 0; i < 25; i++) {
+        cout << "-----------------" << endl;
+        plateau.pushTuile(i);
+        if(plateau.verifyTuile()) {
+            plateau.getCurrentTuile().afficher();
+        }
+    }
     plateau.afficher();
-    cout << plateau.getCurrentTuile().isTuileVide() << endl;
-
-    plateau.popTuile(0, 0);
-    cout << endl;
-    cout << endl;
-    plateau.afficher();
-
-    cout << plateau.getCurrentTuile().isTuileVide() << endl;
 
     return 0;
 }
