@@ -13,10 +13,10 @@ public:
     void afficherListeTuiles();
     void remplirListeTuiles(vector<string> fichier);
     void pushTuile(int index);
-    void popTuile(int row);
+    void popTuile(int row, int column);
+    Tuile getCurrentTuile();
 
 private:
-
     int totalRows_;
     int totalColumns_;
 
@@ -27,11 +27,12 @@ private:
     Tuile selectedTuile_;
     int selectedTuileIterator_;
 
-    // Tuile actuelle dans le plateau
+    // Tuile actuelle dans le plateau (que je m'apprête à actualiser)
     Tuile currentTuile_;
     int currentRow_;
     int currentColumn_;
 
+    Tuile defaultTuile_ = Tuile();
 };
 
 #endif // MACMAHON_PLATEAU_H

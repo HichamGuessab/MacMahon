@@ -51,14 +51,34 @@ void Plateau::afficher() {
     }
 }
 
+Tuile Plateau::getCurrentTuile() {
+    return this->currentTuile_;
+}
+
 void Plateau::pushTuile(int index) {
     cout << "index : " << index << endl;
     cout << "currentRow : " << currentRow_ << endl;
     cout << "currentColumn : " << currentColumn_ << endl;
     this->plateau_[this->currentRow_][this->currentColumn_] = this->listeTuiles_[index];
+    this->currentTuile_ = this->plateau_[this->currentRow_][this->currentColumn_];
     this->currentRow_++;
     if (this->currentRow_ == this->totalRows_) {
         this->currentRow_ = 0;
         this->currentColumn_++;
     }
+}
+
+void Plateau::popTuile(int row, int column) {
+    this->plateau_[row][column] = this->defaultTuile_;
+
+    // Mise à jour des coordonnées de la tuile actuelle
+    if(this->currentRow_ > 0 && this->currentColumn_ > 0) {
+        this->currentColumn_ --;
+    } else if(this->currentRow_ > 0 && this->currentColumn_ == 0) {
+        this->currentRow_ --;
+        this->currentColumn_ = this->totalColumns_;
+    } else {
+
+    }
+    this->currentTuile_ = this->plateau_[this->currentRow_][this->currentColumn_];
 }
