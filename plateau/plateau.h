@@ -13,7 +13,7 @@ public:
     void afficherListeTuiles();
     void remplirListeTuiles(vector<string> fichier);
     void pushTuile(int index);
-    void popTuile(int row, int column);
+    void popTuile();
     Tuile getCurrentTuile();
 
     bool verifyTuile();

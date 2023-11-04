@@ -20,6 +20,13 @@ int main() {
             plateau.getCurrentTuile().afficher();
         }
     }
+    plateau.popTuile();
+    plateau.popTuile();
+    plateau.popTuile();
+    plateau.popTuile();
+    plateau.pushTuile(  2);
+    plateau.popTuile();
+    plateau.popTuile();
     plateau.afficher();
 
     return 0;

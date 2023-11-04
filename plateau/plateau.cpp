@@ -90,11 +90,11 @@ void Plateau::pushTuile(int index) {
 //    cout << "nextColumn : " << nextColumn_ << endl;
 }
 
-void Plateau::popTuile(int row, int column) {
+void Plateau::popTuile() {
     this->nextRow_ = this->currentRow_;
     this->nextColumn_ = this->currentColumn_;
 
-    this->plateau_[row][column] = this->defaultTuile_;
+    this->plateau_[this->currentRow_][this->currentColumn_] = this->defaultTuile_;
 
     // Mise à jour des coordonnées de la tuile actuelle
     if (this->currentRow_ == 0 && this->currentColumn_ == 0) {
