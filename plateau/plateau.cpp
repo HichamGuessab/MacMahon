@@ -239,10 +239,10 @@ bool Plateau::verifyCouleursVoisins() {
     }
 
     // Vérifier les que les couleurs de la tuile actuelle sont bonnes en fonction des couleurs de ses voisins
-    isBonne = ((tuileGauche.isTuileVide()) || (tuileGauche.getCouleurGauche() == currentTuile_.getCouleurGauche())) &&
-              ((tuileHaut.isTuileVide()) || (tuileHaut.getCouleurHaut() == currentTuile_.getCouleurHaut())) &&
-              ((tuileDroite.isTuileVide()) || (tuileDroite.getCouleurDroite() == currentTuile_.getCouleurDroite())) &&
-              ((tuileBas.isTuileVide()) || (tuileBas.getCouleurBas() == currentTuile_.getCouleurBas()));
+    isBonne = ((tuileGauche.isTuileVide()) || (tuileGauche.getCouleurDroite() == currentTuile_.getCouleurGauche())) &&
+              ((tuileHaut.isTuileVide()) || (tuileHaut.getCouleurBas() == currentTuile_.getCouleurHaut())) &&
+              ((tuileDroite.isTuileVide()) || (tuileDroite.getCouleurGauche() == currentTuile_.getCouleurDroite())) &&
+              ((tuileBas.isTuileVide()) || (tuileBas.getCouleurHaut() == currentTuile_.getCouleurBas()));
     return isBonne;
 }
 
