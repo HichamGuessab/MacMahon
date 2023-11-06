@@ -9,24 +9,23 @@ using namespace std;
 bool resoudreSequentiel(Plateau& plateau, int tuileIndex, vector<bool> tuilesUtilisees);
 
 int main() {
-    Fichier fichier("5_5.txt");
+    Fichier fichier("4_4.txt");
     vector<string> file = fichier.readFile();
 
     Plateau plateau(file);
-    plateau.afficherListeTuiles();
 
     vector<Tuile> listeTuiles = plateau.getListeTuiles();
-    // Vérifier si la tuile est valide après erase
-//    listeTuiles.begin()->afficher();
-//    cout << listeTuiles.size() << endl;
-//    listeTuiles.erase(listeTuiles.begin() + 1);
-//    (listeTuiles.begin()+1)->afficher();
-//    cout << listeTuiles.size() << endl;
 
-//    cout << algorithmeSequentiel(plateau, vector<bool>(listeTuiles.size(), false)) << endl;
+    auto start = std::chrono::high_resolution_clock::now();
+
     resoudreSequentiel(plateau, 0, vector<bool>(listeTuiles.size(), false));
 
+    auto end = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
     plateau.afficher();
+
+    std::cout << "Temps d'éxecution: " << duration << " millisecondes" << std::endl;
 
     return 0;
 }
