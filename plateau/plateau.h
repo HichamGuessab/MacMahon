@@ -3,6 +3,7 @@
 
 #include "../fichier/fichier.h"
 #include "tuile/tuile.h"
+#include <vector>
 
 using namespace std;
 

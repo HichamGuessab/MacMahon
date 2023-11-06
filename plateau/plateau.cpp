@@ -270,7 +270,7 @@ bool Plateau::verifyCouleursVoisins() {
         tuileHaut = plateau_[r - 1][c];
         tuileDroite = defaultTuile_;
         tuileBas = defaultTuile_;
-    } else if ((0 < r < totalRows_ - 1) && (0 < c < totalColumns_ - 1)) {
+    } else if (((r > 0) && (r < (totalRows_ - 1))) && ((c > 0) && (c < (totalColumns_ - 1)))) {
 //        cout << "Tuile du milieu" << endl;
         tuileGauche = plateau_[r][c - 1];
         tuileHaut = plateau_[r - 1][c];

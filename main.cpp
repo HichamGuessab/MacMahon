@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <chrono>
+
 #include "fichier/fichier.h"
 #include "plateau/tuile/tuile.h"
 #include "plateau/plateau.h"
