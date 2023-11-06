@@ -15,6 +15,7 @@ Plateau::Plateau(vector<string> fichier) {
     this->nextColumn_ = 0;
 
     this->listeTuiles_ = vector<Tuile>();
+
     this->plateau_ = vector<vector<Tuile>>(this->totalRows_, vector<Tuile>(this->totalColumns_));
     remplirListeTuiles(fichier);
 }
@@ -24,6 +25,7 @@ void Plateau::remplirListeTuiles(vector<string> fichier) {
         Tuile tuile = Tuile(fichier[i][0], fichier[i][2], fichier[i][4], fichier[i][6]);
         this->listeTuiles_.push_back(tuile);
     }
+//    this->tuilesUtilisees = vector<bool>(listeTuiles_.size(), false);
 }
 
 void Plateau::afficherListeTuiles() {
@@ -57,10 +59,25 @@ void Plateau::afficher() {
     }
 }
 
+int Plateau::getTotalRows() {
+    return this->totalRows_;
+}
+
+int Plateau::getTotalColumns() {
+    return this->totalColumns_;
+}
+
 Tuile Plateau::getCurrentTuile() {
     return this->currentTuile_;
 }
 
+vector<Tuile> Plateau::getListeTuiles() {
+    return this->listeTuiles_;
+}
+
+bool Plateau::isTuileUtilisee(vector<bool> tuilesUtilisees, int index) {
+    return tuilesUtilisees[index];
+}
 void Plateau::pushTuile(int index) {
     if((currentRow_ == 0 && currentColumn_ == 0) && (nextRow_ == 0 && nextColumn_ == 0)) {
         bordureCouleur = this->listeTuiles_[index].getCouleurHaut();
@@ -73,6 +90,35 @@ void Plateau::pushTuile(int index) {
 //    cout << "currentColumn : " << currentColumn_ << endl;
 
     this->plateau_[this->currentRow_][this->currentColumn_] = this->listeTuiles_[index];
+    this->currentTuile_ = this->plateau_[this->currentRow_][this->currentColumn_];
+
+    if ((this->currentColumn_ == this->totalColumns_ - 1) &&
+        (this->currentRow_ == this->totalRows_ - 1)) {
+        // Dernière tuile du plateau
+        this->nextColumn_ = this->totalColumns_ - 1;
+        this->nextRow_ = this->totalRows_ - 1;
+    } else if ((this->currentColumn_ == this->totalColumns_ - 1) &&
+               (this->currentRow_ < this->totalRows_ - 1)) {
+        // Dernière colonne d'une ligne
+        this->nextColumn_ = 0;
+        this->nextRow_ = currentRow_ + 1;
+    } else {
+        this->nextColumn_ = currentColumn_ + 1;
+        this->nextRow_ = currentRow_;
+    }
+//    cout << "nextRow : " << nextRow_ << endl;
+//    cout << "nextColumn : " << nextColumn_ << endl;
+}
+
+void Plateau::pushTuile(vector<Tuile> listeTuiles, int index) {
+    currentColumn_ = nextColumn_;
+    currentRow_ = nextRow_;
+
+//    cout << "index : " << index << endl;
+//    cout << "currentRow : " << currentRow_ << endl;
+//    cout << "currentColumn : " << currentColumn_ << endl;
+
+    this->plateau_[this->currentRow_][this->currentColumn_] = listeTuiles[index];
     this->currentTuile_ = this->plateau_[this->currentRow_][this->currentColumn_];
 
     if ((this->currentColumn_ == this->totalColumns_ - 1) &&
@@ -269,4 +315,16 @@ bool Plateau::verifyCouleursAngles() {
     }
     cout << "Erreur dans la fonction verifyCouleursAngles()" << endl;
     return false;
+}
+
+bool Plateau::isRemplit() {
+    if(currentRow_ == totalRows_-1 && currentColumn_ == totalColumns_-1) {
+        cout << "currentRow_ : " << currentRow_ << endl;
+        cout << "currentColumn_ : " << currentColumn_ << endl;
+    }
+    return (this->currentRow_ == this->totalRows_ - 1) && (this->currentColumn_ == this->totalColumns_ - 1);
+}
+
+vector<vector<Tuile>> Plateau::getPlateau() {
+    return this->plateau_;
 }
