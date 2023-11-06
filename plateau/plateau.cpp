@@ -62,6 +62,9 @@ Tuile Plateau::getCurrentTuile() {
 }
 
 void Plateau::pushTuile(int index) {
+    if((currentRow_ == 0 && currentColumn_ == 0) && (nextRow_ == 0 && nextColumn_ == 0)) {
+        bordureCouleur = this->listeTuiles_[index].getCouleurHaut();
+    }
     currentColumn_ = nextColumn_;
     currentRow_ = nextRow_;
 
@@ -126,13 +129,17 @@ bool Plateau::verifyTuile() {
     // Si c'est une tuile des angles
     if ((r == 0 || r == totalRows_ - 1) && (c == 0 || c == totalColumns_ - 1)) {
 //        cout << "Angle" << endl;
-        isBonne = verifyTuileForAngle();
+//        cout << "MonAngle" << verifyTuileForAngle() << endl;
+//        cout << "MaBordure" << verifyCouleursBordure() << endl;
+        isBonne = verifyTuileForAngle() && verifyCouleursBordure();
+//        cout << "isBonne : " << isBonne << endl;
     }
-    // Si c'est une tuile qui est sur la bordure (y compris les angles)
-    if (r == 0 || r == totalRows_ - 1 || c == 0 || c == totalColumns_ - 1) {
+    // Si c'est une tuile qui est sur la bordure
+    else if (r == 0 || r == totalRows_ - 1 || c == 0 || c == totalColumns_ - 1) {
 //        cout << "Bordure" << endl;
         isBonne = verifyCouleursBordure();
     }
+//    cout << "Voisins :" << verifyCouleursVoisins() << endl;
     return isBonne && verifyCouleursVoisins();
 }
 
@@ -146,20 +153,15 @@ bool Plateau::verifyTuileForAngle() {
     } else if (this->currentRow_ == 0 && this->currentColumn_ == this->totalColumns_ - 1) {
         // Angle haut droit
 //        cout << "Angle haut droit" << endl;
-        return (this->currentTuile_.getCouleurHaut() == this->currentTuile_.getCouleurDroite()) &&
-               (this->currentTuile_.getCouleurGauche() == this->plateau_[this->currentRow_][this->currentColumn_ - 1].getCouleurDroite());
+        return (this->currentTuile_.getCouleurHaut() == this->currentTuile_.getCouleurDroite());
     } else if (this->currentRow_ == (this->totalRows_ - 1) && this->currentColumn_ == 0) {
         // Angle bas gauche
 //        cout << "Angle bas gauche" << endl;
-        return (this->currentTuile_.getCouleurGauche() == this->currentTuile_.getCouleurBas()) &&
-               (this->currentTuile_.getCouleurHaut() == this->plateau_[this->currentRow_ - 1][this->currentColumn_].getCouleurBas()) &&
-               (this->currentTuile_.getCouleurDroite() == this->plateau_[this->currentRow_][this->currentColumn_ + 1].getCouleurBas());
+        return (this->currentTuile_.getCouleurGauche() == this->currentTuile_.getCouleurBas());
     } else if (this->currentRow_ == (this->totalRows_ - 1) && this->currentColumn_ == (this->totalColumns_ - 1)) {
         // Angle bas droit
 //        cout << "Angle bas droit" << endl;
-        return (this->currentTuile_.getCouleurBas() == this->currentTuile_.getCouleurDroite()) &&
-               (this->currentTuile_.getCouleurGauche() == this->plateau_[this->currentRow_][this->currentColumn_ - 1].getCouleurDroite()) &&
-               (this->currentTuile_.getCouleurHaut() == this->plateau_[this->currentRow_ - 1][this->currentColumn_].getCouleurBas());
+        return (this->currentTuile_.getCouleurBas() == this->currentTuile_.getCouleurDroite());
     }
     cout << "Erreur dans la fonction verifyTuileForAngle()" << endl;
     return true;
@@ -174,16 +176,19 @@ bool Plateau::verifyCouleursBordure() {
 
     if (r == 0) {
         // Si c'est une tuile sur la bordure du haut
-        return this->currentTuile_.getCouleurHaut() == this->bordureCouleur;
+//        cout << bordureCouleur << endl;
+        return (this->currentTuile_.getCouleurHaut() == this->bordureCouleur);
     } else if (c == 0) {
         // Si c'est une tuile sur la bordure de gauche
-        return this->currentTuile_.getCouleurGauche() == this->bordureCouleur;
+//        cout << this->currentTuile_.getCouleurGauche() << endl;
+//        cout << this->bordureCouleur << endl;
+        return (this->currentTuile_.getCouleurGauche() == this->bordureCouleur);
     } else if (r == this->totalRows_ - 1) {
         // Si c'est une tuile sur la bordure du bas
-        return this->currentTuile_.getCouleurBas() == this->bordureCouleur;
+        return (this->currentTuile_.getCouleurBas() == this->bordureCouleur);
     } else if (c == this->totalColumns_ - 1) {
         // Si c'est une tuile sur la bordure de droite
-        return this->currentTuile_.getCouleurDroite() == this->bordureCouleur;
+        return (this->currentTuile_.getCouleurDroite() == this->bordureCouleur);
     }
     return true;
 }
@@ -197,6 +202,7 @@ bool Plateau::verifyCouleursVoisins() {
 
     // Vérification des couleurs si c'est un angle
     if ((r == 0 || r == totalRows_ - 1) && (c == 0 || c == totalColumns_ - 1)) {
+//        cout << "Angle de la mort qui tue" << endl;
         return verifyCouleursAngles();
     }
 
@@ -210,25 +216,25 @@ bool Plateau::verifyCouleursVoisins() {
 //        cout << "Tuile du haut" << endl;
         tuileGauche = plateau_[r][c - 1];
         tuileHaut = defaultTuile_;
-        tuileDroite = plateau_[r][c + 1];
-        tuileBas = plateau_[r + 1][c];
+        tuileDroite = defaultTuile_;
+        tuileBas = defaultTuile_;
     } else if (r == totalRows_ - 1) {
 //        cout << "Tuile du bas" << endl;
         tuileGauche = plateau_[r][c - 1];
         tuileHaut = plateau_[r - 1][c];
-        tuileDroite = plateau_[r][c + 1];
+        tuileDroite = defaultTuile_;
         tuileBas = defaultTuile_;
     } else if ((0 < r < totalRows_ - 1) && (0 < c < totalColumns_ - 1)) {
 //        cout << "Tuile du milieu" << endl;
         tuileGauche = plateau_[r][c - 1];
         tuileHaut = plateau_[r - 1][c];
-        tuileDroite = plateau_[r][c + 1];
-        tuileBas = plateau_[r + 1][c];
+        tuileDroite = this->defaultTuile_;
+        tuileBas = this->defaultTuile_;
     } else if (c == 0) {
 //        cout << "Tuile de gauche" << endl;
         tuileGauche = defaultTuile_;
         tuileHaut = plateau_[r - 1][c];
-        tuileDroite = plateau_[r][c + 1];
+        tuileDroite = defaultTuile_;
         tuileBas = defaultTuile_;
     } else if (c == totalColumns_ - 1) {
 //        cout << "Tuile de droite" << endl;
@@ -255,8 +261,7 @@ bool Plateau::verifyCouleursAngles() {
         return currentTuile_.getCouleurGauche() == plateau_[currentRow_][currentColumn_ - 1].getCouleurDroite();
     } else if (currentRow_ == (totalRows_ - 1) && currentColumn_ == 0) {
         // Angle bas gauche
-        return (currentTuile_.getCouleurHaut() == plateau_[currentRow_ - 1][currentColumn_].getCouleurBas()) &&
-               (currentTuile_.getCouleurDroite() == plateau_[currentRow_][currentColumn_ + 1].getCouleurBas());
+        return (currentTuile_.getCouleurHaut() == plateau_[currentRow_ - 1][currentColumn_].getCouleurBas());
     } else if (currentRow_ == (totalRows_ - 1) && currentColumn_ == (totalColumns_ - 1)) {
         // Angle bas droit
         return (currentTuile_.getCouleurGauche() == plateau_[currentRow_][currentColumn_ - 1].getCouleurDroite()) &&
