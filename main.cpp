@@ -15,6 +15,12 @@ bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, v
 void threadLauncher(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved);
 bool lancerThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees);
 
+bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees);
+void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved);
+
+int cpt = 0;
+const int MAX_THREADS = 10;
+
 int main() {
     Fichier fichier("5_5.txt");
     vector<string> file = fichier.readFile();
@@ -27,7 +33,9 @@ int main() {
     auto start = std::chrono::high_resolution_clock::now();
 
     bool resolved = false;
+//    resoudreSequentiel(plateauFinal, 0, vector<bool>(listeTuiles.size()));
     lancerThreads(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
+//    lancerThreadsPool(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -95,6 +103,53 @@ void threadLauncher(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vect
             return;
         }
     }
+}
+
+bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees) {
+    cpt = 0;
+    bool resolved = false;
+    // J'ai x tuiles, elle sera lancé x fois dans x threads
+    // Chaque thread aura une tuile différente
+    int nbTuiles = plateau.getListeTuiles().size();
+    vector<thread> threads(nbTuiles);
+
+    int index = 0;
+    while (index < nbTuiles && !resolved) {
+        if(cpt < MAX_THREADS) {
+            plateau.pushTuile(index);
+//            if (plateau.verifyTuile()) {
+                tuilesUtilisees[index] = true;
+                cout << "Tuile index : " << index << " est utilisée" << endl;
+                cout << "Cpt : " << cpt << endl;
+                threads[index] = thread(threadLauncherPool, ref(plateauFinal), plateau, tuileIndex, tuilesUtilisees,
+                                        ref(resolved));
+                tuilesUtilisees[index] = false;
+//            }
+            plateau.popTuile();
+            index++;
+        }
+    }
+    for(int i = 0; i < nbTuiles; i++) {
+        if(threads[i].joinable()) {
+            threads[i].join();
+        }
+    }
+    return false;
+}
+
+void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved) {
+    cpt++;
+    if(resolved) {
+        cpt--;
+        return;
+    } else {
+        Plateau plateauX = plateau;
+        if(resoudreByThreads(plateauFinal, plateau, tuileIndex + 1, std::move(tuilesUtilisees), resolved)) {
+            cpt--;
+            return;
+        }
+    }
+    cpt--;
 }
 
 bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved) {
