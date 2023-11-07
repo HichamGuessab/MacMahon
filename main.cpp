@@ -102,8 +102,8 @@ bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, v
         return false;
     }
     if (tuileIndex == plateau.getTotalRows() * plateau.getTotalColumns()) {
-//        plateau.afficher();
         plateauFinal = plateau;
+        resolved = true;
         return true;
     }
 
