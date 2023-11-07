@@ -70,12 +70,12 @@ bool lancerThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vecto
 
     for (int i = 0; i < nbTuiles; i++) {
         plateau.pushTuile(i);
-        if (plateau.verifyTuile()) {
+//        if (plateau.verifyTuile()) {
             tuilesUtilisees[i] = true;
             cout << "Tuile i : " << i << " est utilisée" << endl;
             threads[i] = thread(threadLauncher, ref(plateauFinal), plateau, tuileIndex, tuilesUtilisees, ref(resolved));
             tuilesUtilisees[i] = false;
-        }
+//        }
         plateau.popTuile();
     }
     for(int i = 0; i < nbTuiles; i++) {
