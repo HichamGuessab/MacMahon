@@ -21,6 +21,8 @@ void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, 
 int cpt = 0;
 const int MAX_THREADS = 10;
 
+// g++ main.cpp plateau/plateau.cpp plateau/tuile/tuile.cpp fichier/fichier.cpp -o main -l pthread
+
 int main() {
     Fichier fichier("5_5.txt");
     vector<string> file = fichier.readFile();
@@ -177,5 +179,4 @@ bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, v
         }
     }
     return false;
-    // g++ main.cpp plateau/plateau.cpp plateau/tuile/tuile.cpp fichier/fichier.cpp -o main -l pthread
 }
