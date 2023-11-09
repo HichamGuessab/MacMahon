@@ -1,11 +1,11 @@
 #include "iostream"
-#include "fichier.h"
+#include "file.h"
 
-Fichier::Fichier(string path) {
+File::File(string path) {
     this->path = this->path + path;
 }
 
-vector<string> Fichier::readFile() {
+vector<string> File::readFile() {
     cout << "Lecture du fichier : " << this->path << endl;
     vector<string> fileLines;
     ifstream file(this->path);

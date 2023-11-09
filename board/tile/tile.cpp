@@ -1,7 +1,7 @@
-#include "tuile.h"
+#include "tile.h"
 #include "iostream"
 
-Tuile::Tuile() {
+Tile::Tile() {
     this->leftColor = 'N';
     this->topColor = 'N';
     this->rightColor = 'N';
@@ -13,7 +13,7 @@ Tuile::Tuile() {
     this->bottomANSIColor = ANSIColors['N'];
 }
 
-Tuile::Tuile(char left, char top, char right, char bottom) {
+Tile::Tile(char left, char top, char right, char bottom) {
     this->leftColor = left;
     this->topColor = top;
     this->rightColor = right;
@@ -25,7 +25,7 @@ Tuile::Tuile(char left, char top, char right, char bottom) {
     this->bottomANSIColor = ANSIColors[bottom];
 }
 
-Tuile::Tuile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column) {
+Tile::Tile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column) {
     this->leftColor = leftColor;
     this->topColor = topColor;
     this->rightColor = rightColor;
@@ -37,7 +37,7 @@ Tuile::Tuile(char leftColor, char topColor, char rightColor, char bottomColor, i
     this->bottomANSIColor = ANSIColors[bottomColor];
 }
 
-void Tuile::display() {
+void Tile::display() {
     displayTopLine();
     cout << endl;
     displayMiddleLine();
@@ -46,41 +46,41 @@ void Tuile::display() {
     cout << endl << endl;
 }
 
-void Tuile::displayTopLine() {
+void Tile::displayTopLine() {
     cout << this-> ANSIColors['N'] << "   ";
     cout << this->topANSIColor << "███" << ANSIColors['N'];
     cout << this-> ANSIColors['N'] << "   ";
 }
 
-void Tuile::displayMiddleLine() {
+void Tile::displayMiddleLine() {
     cout << this->leftANSIColor << "███" << ANSIColors['N'];
     cout << this-> ANSIColors['N'] << "   ";
     cout << this->rightANSIColor << "███" << ANSIColors['N'];
 }
 
-void Tuile::displayBottomLine() {
+void Tile::displayBottomLine() {
     cout << this-> ANSIColors['N'] << "   ";
     cout << this->bottomANSIColor << "███" << ANSIColors['N'];
     cout << this-> ANSIColors['N'] << "   ";
 };
 
-char Tuile::getLeftColor() {
+char Tile::getLeftColor() {
     return this->leftColor;
 }
 
-char Tuile::getTopColor() {
+char Tile::getTopColor() {
     return this->topColor;
 }
 
-char Tuile::getRightColor() {
+char Tile::getRightColor() {
     return this->rightColor;
 }
 
-char Tuile::getBottomColor() {
+char Tile::getBottomColor() {
     return this->bottomColor;
 }
 
-bool Tuile::isEmpty() {
+bool Tile::isEmpty() {
     return this->leftColor == 'N' &&
            this->topColor == 'N' &&
            this->rightColor == 'N' &&

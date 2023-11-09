@@ -1,5 +1,5 @@
-#ifndef MACMAHON_TUILE_H
-#define MACMAHON_TUILE_H
+#ifndef MACMAHON_TILE_H
+#define MACMAHON_TILE_H
 
 #include "string"
 #include <map>
@@ -7,11 +7,11 @@
 
 using namespace std;
 
-class Tuile {
+class Tile {
 public:
-    Tuile();
-    Tuile(char left, char top, char right, char bottom);
-    Tuile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column);
+    Tile();
+    Tile(char left, char top, char right, char bottom);
+    Tile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column);
 
     char getLeftColor();
     char getTopColor();
@@ -43,4 +43,4 @@ private:
     };
 };
 
-#endif // MACMAHON_TUILE_H
+#endif // MACMAHON_TILE_H

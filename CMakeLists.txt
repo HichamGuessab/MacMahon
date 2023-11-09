@@ -4,7 +4,7 @@ project(MacMahon)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(MacMahon main.cpp
-        fichier/fichier.cpp
-        plateau/tuile/tuile.cpp
-        plateau/plateau.h
-        plateau/plateau.cpp)
+        file/file.cpp
+        board/tile/tile.cpp
+        board/board.h
+        board/board.cpp)
