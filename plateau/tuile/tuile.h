@@ -10,36 +10,32 @@ using namespace std;
 class Tuile {
 public:
     Tuile();
-    Tuile(char gauche, char haut, char droite, char bas);
-    Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas, int row, int column);
+    Tuile(char left, char top, char right, char bottom);
+    Tuile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column);
 
-    vector<string> getCouleurs();
+    char getLeftColor();
+    char getTopColor();
+    char getRightColor();
+    char getBottomColor();
 
-    char getCouleurGauche();
-    char getCouleurHaut();
-    char getCouleurDroite();
-    char getCouleurBas();
+    void displayTopLine();
+    void displayMiddleLine();
+    void displayBottomLine();
+    void display();
 
-    vector<int> getPlacement();
-
-    void afficher();
-    void afficherLigneHaut();
-    void afficherLigneMilieu();
-    void afficherLigneBas();
-
-    bool isTuileVide();
+    bool isEmpty();
 
 private:
-    char couleurGauche;
-    char couleurHaut;
-    char couleurDroite;
-    char couleurBas;
+    char leftColor;
+    char topColor;
+    char rightColor;
+    char bottomColor;
 
-    string couleurANSIGauche;
-    string couleurANSIHaut;
-    string couleurANSIDroite;
-    string couleurANSIBas;
-    map<char, string> couleursANSI = {
+    string leftANSIColor;
+    string topANSIColor;
+    string rightANSIColor;
+    string bottomANSIColor;
+    map<char, string> ANSIColors = {
             {'N', "\x1B[0m"},
             {'R', "\x1B[31m"},
             {'G', "\x1B[32m"},

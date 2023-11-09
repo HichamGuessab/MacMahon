@@ -10,13 +10,14 @@
 
 using namespace std;
 
-bool resoudreSequentiel(Plateau& plateau, int tuileIndex, vector<bool> tuilesUtilisees);
-bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool &resolved);
-void threadLauncher(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved);
-bool lancerThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees);
+bool sequentialRecursiveResolver(Plateau& plateau, int tuileIndex, vector<bool> tuilesUsed);
 
-bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees);
-void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved);
+bool threadsManager(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed);
+void threadLauncher(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool& resolved);
+bool threadsRecursiveResolver(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool &resolved);
+
+bool threadsPoolManager(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed);
+void threadPoolLauncher(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool& resolved);
 
 int cpt = 0;
 const int MAX_THREADS = 10;
@@ -30,40 +31,40 @@ int main() {
     Plateau plateau(file);
     Plateau plateauFinal(file);
 
-    vector<Tuile> listeTuiles = plateau.getListeTuiles();
+    vector<Tuile> listeTuiles = plateau.getListTuiles();
 
     auto start = std::chrono::high_resolution_clock::now();
 
     bool resolved = false;
-//    resoudreSequentiel(plateauFinal, 0, vector<bool>(listeTuiles.size()));
-    lancerThreads(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
-//    lancerThreadsPool(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
+//    sequentialRecursiveResolver(plateauFinal, 0, vector<bool>(listeTuiles.size()));
+    threadsManager(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
+//    threadsPoolManager(plateauFinal, plateau, 0, vector<bool>(listeTuiles.size(), resolved));
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
-    plateauFinal.afficher();
+    plateauFinal.display();
 
     std::cout << "Temps d'éxecution: " << duration << " millisecondes" << std::endl;
 
     return 0;
 }
 
-bool resoudreSequentiel(Plateau& plateau, int tuileIndex, vector<bool> tuilesUtilisees) {
+bool sequentialRecursiveResolver(Plateau& plateau, int tuileIndex, vector<bool> tuilesUsed) {
     if (tuileIndex == plateau.getTotalRows() * plateau.getTotalColumns()) {
         return true;
     }
 
-    for (int i = 0; i < plateau.getListeTuiles().size(); i++) {
-        if (!plateau.isTuileUtilisee(tuilesUtilisees, i)) {
+    for (int i = 0; i < plateau.getListTuiles().size(); i++) {
+        if (!plateau.isTuileUsed(tuilesUsed, i)) {
             plateau.pushTuile(i);
 
             if (plateau.verifyTuile()) {
-                tuilesUtilisees[i] = true;
-                if (resoudreSequentiel(plateau, tuileIndex + 1, tuilesUtilisees)) {
+                tuilesUsed[i] = true;
+                if (sequentialRecursiveResolver(plateau, tuileIndex + 1, tuilesUsed)) {
                     return true;
                 }
-                tuilesUtilisees[i] = false;
+                tuilesUsed[i] = false;
             }
             plateau.popTuile();
         }
@@ -71,20 +72,20 @@ bool resoudreSequentiel(Plateau& plateau, int tuileIndex, vector<bool> tuilesUti
     return false;
 }
 
-bool lancerThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees) {
+bool threadsManager(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed) {
     bool resolved = false;
     // J'ai x tuiles, elle sera lancé x fois dans x threads
     // Chaque thread aura une tuile différente
-    int nbTuiles = plateau.getListeTuiles().size();
+    int nbTuiles = plateau.getListTuiles().size();
     vector<thread> threads(nbTuiles);
 
     for (int i = 0; i < nbTuiles; i++) {
         plateau.pushTuile(i);
 //        if (plateau.verifyTuile()) {
-            tuilesUtilisees[i] = true;
+            tuilesUsed[i] = true;
             cout << "Tuile i : " << i << " est utilisée" << endl;
-            threads[i] = thread(threadLauncher, ref(plateauFinal), plateau, tuileIndex, tuilesUtilisees, ref(resolved));
-            tuilesUtilisees[i] = false;
+            threads[i] = thread(threadLauncher, ref(finalPlateau), plateau, tuileIndex, tuilesUsed, ref(resolved));
+        tuilesUsed[i] = false;
 //        }
         plateau.popTuile();
     }
@@ -96,23 +97,23 @@ bool lancerThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vecto
     return false;
 }
 
-void threadLauncher(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved) {
+void threadLauncher(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool& resolved) {
     if(resolved) {
         return;
     } else {
         Plateau plateauX = plateau;
-        if(resoudreByThreads(plateauFinal, plateau, tuileIndex + 1, std::move(tuilesUtilisees), resolved)) {
+        if(threadsRecursiveResolver(finalPlateau, plateau, tuileIndex + 1, std::move(tuilesUsed), resolved)) {
             return;
         }
     }
 }
 
-bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees) {
+bool threadsPoolManager(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed) {
     cpt = 0;
     bool resolved = false;
     // J'ai x tuiles, elle sera lancé x fois dans x threads
     // Chaque thread aura une tuile différente
-    int nbTuiles = plateau.getListeTuiles().size();
+    int nbTuiles = plateau.getListTuiles().size();
     vector<thread> threads(nbTuiles);
 
     int index = 0;
@@ -120,12 +121,12 @@ bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, v
         if(cpt < MAX_THREADS) {
             plateau.pushTuile(index);
 //            if (plateau.verifyTuile()) {
-                tuilesUtilisees[index] = true;
+                tuilesUsed[index] = true;
                 cout << "Tuile index : " << index << " est utilisée" << endl;
                 cout << "Cpt : " << cpt << endl;
-                threads[index] = thread(threadLauncherPool, ref(plateauFinal), plateau, tuileIndex, tuilesUtilisees,
+                threads[index] = thread(threadPoolLauncher, ref(finalPlateau), plateau, tuileIndex, tuilesUsed,
                                         ref(resolved));
-                tuilesUtilisees[index] = false;
+            tuilesUsed[index] = false;
 //            }
             plateau.popTuile();
             index++;
@@ -139,14 +140,14 @@ bool lancerThreadsPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, v
     return false;
 }
 
-void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved) {
+void threadPoolLauncher(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool& resolved) {
     cpt++;
     if(resolved) {
         cpt--;
         return;
     } else {
         Plateau plateauX = plateau;
-        if(resoudreByThreads(plateauFinal, plateau, tuileIndex + 1, std::move(tuilesUtilisees), resolved)) {
+        if(threadsRecursiveResolver(finalPlateau, plateau, tuileIndex + 1, std::move(tuilesUsed), resolved)) {
             cpt--;
             return;
         }
@@ -154,26 +155,26 @@ void threadLauncherPool(Plateau& plateauFinal, Plateau plateau, int tuileIndex, 
     cpt--;
 }
 
-bool resoudreByThreads(Plateau& plateauFinal, Plateau plateau, int tuileIndex, vector<bool> tuilesUtilisees, bool& resolved) {
+bool threadsRecursiveResolver(Plateau& finalPlateau, Plateau plateau, int tuileIndex, vector<bool> tuilesUsed, bool& resolved) {
     if(resolved) {
         return false;
     }
     if (tuileIndex == plateau.getTotalRows() * plateau.getTotalColumns()) {
-        plateauFinal = plateau;
+        finalPlateau = plateau;
         resolved = true;
         return true;
     }
 
-    for (int i = 0; i < plateau.getListeTuiles().size(); i++) {
-        if (!plateau.isTuileUtilisee(tuilesUtilisees, i)) {
+    for (int i = 0; i < plateau.getListTuiles().size(); i++) {
+        if (!plateau.isTuileUsed(tuilesUsed, i)) {
             plateau.pushTuile(i);
 
             if (plateau.verifyTuile()) {
-                tuilesUtilisees[i] = true;
-                if (resoudreByThreads(plateauFinal, plateau, tuileIndex + 1, tuilesUtilisees, resolved)) {
+                tuilesUsed[i] = true;
+                if (threadsRecursiveResolver(finalPlateau, plateau, tuileIndex + 1, tuilesUsed, resolved)) {
                     return true;
                 }
-                tuilesUtilisees[i] = false;
+                tuilesUsed[i] = false;
             }
             plateau.popTuile();
         }

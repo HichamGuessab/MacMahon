@@ -2,96 +2,87 @@
 #include "iostream"
 
 Tuile::Tuile() {
-    this->couleurGauche = 'N';
-    this->couleurHaut = 'N';
-    this->couleurDroite = 'N';
-    this->couleurBas = 'N';
+    this->leftColor = 'N';
+    this->topColor = 'N';
+    this->rightColor = 'N';
+    this->bottomColor = 'N';
 
-    this->couleurANSIGauche = couleursANSI['N'];
-    this->couleurANSIHaut = couleursANSI['N'];
-    this->couleurANSIDroite = couleursANSI['N'];
-    this->couleurANSIBas = couleursANSI['N'];
+    this->leftANSIColor = ANSIColors['N'];
+    this->topANSIColor = ANSIColors['N'];
+    this->rightANSIColor = ANSIColors['N'];
+    this->bottomANSIColor = ANSIColors['N'];
 }
 
-Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas) {
-    this->couleurGauche = couleurGauche;
-    this->couleurHaut = couleurHaut;
-    this->couleurDroite = couleurDroite;
-    this->couleurBas = couleurBas;
+Tuile::Tuile(char left, char top, char right, char bottom) {
+    this->leftColor = left;
+    this->topColor = top;
+    this->rightColor = right;
+    this->bottomColor = bottom;
 
-    this->couleurANSIGauche = couleursANSI[couleurGauche];
-    this->couleurANSIHaut = couleursANSI[couleurHaut];
-    this->couleurANSIDroite = couleursANSI[couleurDroite];
-    this->couleurANSIBas = couleursANSI[couleurBas];
+    this->leftANSIColor = ANSIColors[left];
+    this->topANSIColor = ANSIColors[top];
+    this->rightANSIColor = ANSIColors[right];
+    this->bottomANSIColor = ANSIColors[bottom];
 }
 
-Tuile::Tuile(char couleurGauche, char couleurHaut, char couleurDroite, char couleurBas, int row, int column) {
-    this->couleurGauche = couleurGauche;
-    this->couleurHaut = couleurHaut;
-    this->couleurDroite = couleurDroite;
-    this->couleurBas = couleurBas;
+Tuile::Tuile(char leftColor, char topColor, char rightColor, char bottomColor, int row, int column) {
+    this->leftColor = leftColor;
+    this->topColor = topColor;
+    this->rightColor = rightColor;
+    this->bottomColor = bottomColor;
 
-    this->couleurANSIGauche = couleursANSI[couleurGauche];
-    this->couleurANSIHaut = couleursANSI[couleurHaut];
-    this->couleurANSIDroite = couleursANSI[couleurDroite];
-    this->couleurANSIBas = couleursANSI[couleurBas];
+    this->leftANSIColor = ANSIColors[leftColor];
+    this->topANSIColor = ANSIColors[topColor];
+    this->rightANSIColor = ANSIColors[rightColor];
+    this->bottomANSIColor = ANSIColors[bottomColor];
 }
 
-void Tuile::afficher() {
-    afficherLigneHaut();
+void Tuile::display() {
+    displayTopLine();
     cout << endl;
-    afficherLigneMilieu();
+    displayMiddleLine();
     cout << endl;
-    afficherLigneBas();
+    displayBottomLine();
     cout << endl << endl;
 }
 
-void Tuile::afficherLigneHaut() {
-    cout << this-> couleursANSI['N'] << "   ";
-    cout << this->couleurANSIHaut << "███" << couleursANSI['N'];
-    cout << this-> couleursANSI['N'] << "   ";
+void Tuile::displayTopLine() {
+    cout << this-> ANSIColors['N'] << "   ";
+    cout << this->topANSIColor << "███" << ANSIColors['N'];
+    cout << this-> ANSIColors['N'] << "   ";
 }
 
-void Tuile::afficherLigneMilieu() {
-    cout << this->couleurANSIGauche << "███" << couleursANSI['N'];
-    cout << this-> couleursANSI['N'] << "   ";
-    cout << this->couleurANSIDroite << "███" << couleursANSI['N'];
+void Tuile::displayMiddleLine() {
+    cout << this->leftANSIColor << "███" << ANSIColors['N'];
+    cout << this-> ANSIColors['N'] << "   ";
+    cout << this->rightANSIColor << "███" << ANSIColors['N'];
 }
 
-void Tuile::afficherLigneBas() {
-    cout << this-> couleursANSI['N'] << "   ";
-    cout << this->couleurANSIBas << "███" << couleursANSI['N'];
-    cout << this-> couleursANSI['N'] << "   ";
+void Tuile::displayBottomLine() {
+    cout << this-> ANSIColors['N'] << "   ";
+    cout << this->bottomANSIColor << "███" << ANSIColors['N'];
+    cout << this-> ANSIColors['N'] << "   ";
 };
 
-vector<string> Tuile::getCouleurs() {
-    vector<string> couleursTuile;
-    couleursTuile.push_back(this->couleurANSIGauche);
-    couleursTuile.push_back(this->couleurANSIHaut);
-    couleursTuile.push_back(this->couleurANSIDroite);
-    couleursTuile.push_back(this->couleurANSIBas);
-    return couleursTuile;
+char Tuile::getLeftColor() {
+    return this->leftColor;
 }
 
-char Tuile::getCouleurGauche() {
-    return this->couleurGauche;
+char Tuile::getTopColor() {
+    return this->topColor;
 }
 
-char Tuile::getCouleurHaut() {
-    return this->couleurHaut;
+char Tuile::getRightColor() {
+    return this->rightColor;
 }
 
-char Tuile::getCouleurDroite() {
-    return this->couleurDroite;
+char Tuile::getBottomColor() {
+    return this->bottomColor;
 }
 
-char Tuile::getCouleurBas() {
-    return this->couleurBas;
-}
-
-bool Tuile::isTuileVide() {
-    return this->couleurGauche == 'N' &&
-           this->couleurHaut == 'N' &&
-           this->couleurDroite == 'N' &&
-           this->couleurBas == 'N';
+bool Tuile::isEmpty() {
+    return this->leftColor == 'N' &&
+           this->topColor == 'N' &&
+           this->rightColor == 'N' &&
+           this->bottomColor == 'N';
 }

@@ -9,42 +9,35 @@ using namespace std;
 
 class Plateau {
 public:
-    Plateau(vector<string> fichier);
-    void afficher();
-    void afficherListeTuiles();
-    void remplirListeTuiles(vector<string> fichier);
+    Plateau(vector<string> file);
+    void fillListTuiles(vector<string> file);
     void pushTuile(int index);
-    void pushTuile(vector<Tuile> listeTuiles, int index);
     void popTuile();
 
     int getTotalRows();
     int getTotalColumns();
 
     Tuile getCurrentTuile();
-    vector<Tuile> getListeTuiles();
-    bool isTuileUtilisee(vector<bool> tuilesUtilisees, int index);
-
-    void setTuileUtilisee(int index, bool value);
+    vector<Tuile> getListTuiles();
+    bool isTuileUsed(vector<bool> tuilesUsed, int index);
 
     bool verifyTuile();
-    bool verifyTuileForAngle();
-    bool verifyCouleursBordure();
-    bool verifyCouleursAngles();
-    bool verifyCouleursVoisins();
+    bool verifyTuileForCorner();
+    bool verifyBordersColors();
+    bool verifyCornersColors();
+    bool verifyNeighborsColors();
 
-    bool isRemplit();
     vector<vector<Tuile>> getPlateau();
+
+    void display();
+    void displayListTuiles();
 
 private:
     int totalRows_;
     int totalColumns_;
 
-    vector<Tuile> listeTuiles_;
+    vector<Tuile> listTuiles_;
     vector<vector<Tuile>> plateau_;
-
-    // Tuile sélectionnée dans la liste des tuiles
-    Tuile selectedTuile_;
-    int selectedTuileIterator_;
 
     // Tuile actuelle dans le plateau (que je m'apprête à actualiser)
     Tuile currentTuile_;
@@ -56,7 +49,7 @@ private:
 
     Tuile defaultTuile_ = Tuile();
 
-    char bordureCouleur;
+    char borderColor;
 };
 
 #endif // MACMAHON_PLATEAU_H

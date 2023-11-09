@@ -6,18 +6,18 @@ Fichier::Fichier(string path) {
 }
 
 vector<string> Fichier::readFile() {
-    cout << "Reading file: " << this->path << endl;
-    vector<string> fichier;
+    cout << "Lecture du fichier : " << this->path << endl;
+    vector<string> fileLines;
     ifstream file(this->path);
     if(file) {
-        string ligne;
-        while(getline(file, ligne)) {
-            fichier.push_back(ligne);
+        string line;
+        while(getline(file, line)) {
+            fileLines.push_back(line);
         }
         file.close();
     }
     else {
-        cout << "ERROR: Impossible d'ouvrir le fichier en lecture." << endl;
+        cout << "ERROR: Impossible d'ouvrir le fileLines en lecture." << endl;
     }
-    return fichier;
+    return fileLines;
 }
