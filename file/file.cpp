@@ -17,7 +17,7 @@ vector<string> File::readFile() {
         file.close();
     }
     else {
-        cout << "ERROR: Impossible d'ouvrir le fileLines en lecture." << endl;
+        cout << "ERROR: Impossible d'ouvrir le fichier en lecture." << endl;
     }
     return fileLines;
 }

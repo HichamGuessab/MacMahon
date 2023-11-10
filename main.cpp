@@ -12,20 +12,18 @@ using namespace std;
 
 bool sequentialRecursiveResolver(Board& board, int tileIndex, vector<bool> tilesUsed);
 
-bool threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed);
+void threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed);
 void threadLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool& resolved);
 bool threadsRecursiveResolver(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool &resolved);
 
-bool threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed);
+void threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed);
 void threadPoolLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool& resolved);
 
-int cpt = 0;
-const int MAX_THREADS = 10;
+atomic<int> cpt = 0;
+const int MAX_THREADS = 5;
 
-// g++ main.cpp board/board.cpp board/tile/tile.cpp file/file.cpp -o main -l pthread
-
-int main() {
-    File fichier("5_5.txt");
+int main(int argc, char** argv) {
+    File fichier("4_4.txt");
     vector<string> file = fichier.readFile();
 
     Board board(file);
@@ -36,8 +34,8 @@ int main() {
     auto start = std::chrono::high_resolution_clock::now();
 
     bool resolved = false;
-//    sequentialRecursiveResolver(finalBoard, 0, vector<bool>(tilesList.size()));
-    threadsManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
+    sequentialRecursiveResolver(finalBoard, 0, vector<bool>(tilesList.size()));
+//    threadsManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
 //    threadsPoolManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -72,7 +70,7 @@ bool sequentialRecursiveResolver(Board& board, int tileIndex, vector<bool> tiles
     return false;
 }
 
-bool threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed) {
+void threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed) {
     bool resolved = false;
     // J'ai x tiles, elle sera lancé x fois dans x threads
     // Chaque thread aura une tile différente
@@ -81,9 +79,10 @@ bool threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> 
 
     for (int i = 0; i < nbTiles; i++) {
         board.pushTile(i);
+        // Je n'ai pas rajouté ce if pour avoir de meilleurs résultats (sinon il n'y a pas de lancement de threads pour les premières mauvaises tuiles)
 //        if (board.verifyTile()) {
             tilesUsed[i] = true;
-            cout << "Tile i : " << i << " est utilisée" << endl;
+            cout << "Tile index : " << i << " est utilisée" << endl;
             threads[i] = thread(threadLauncher, ref(finalBoard), board, tileIndex, tilesUsed, ref(resolved));
         tilesUsed[i] = false;
 //        }
@@ -94,35 +93,33 @@ bool threadsManager(Board& finalBoard, Board board, int tileIndex, vector<bool> 
             threads[i].join();
         }
     }
-    return false;
 }
 
 void threadLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool& resolved) {
     if(resolved) {
         return;
     } else {
-        Board boardX = board;
         if(threadsRecursiveResolver(finalBoard, board, tileIndex + 1, std::move(tilesUsed), resolved)) {
             return;
         }
     }
 }
 
-bool threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed) {
+void threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed) {
     cpt = 0;
     bool resolved = false;
-    // J'ai x tiles, elle sera lancé x fois dans x threads
-    // Chaque thread aura une tile différente
     int nbTiles = board.getListTiles().size();
     vector<thread> threads(nbTiles);
 
+    // Correspond au nombre de tâches dans mon bassin
     int index = 0;
     while (index < nbTiles && !resolved) {
         if(cpt < MAX_THREADS) {
             board.pushTile(index);
+            // Je n'ai pas rajouté ce if pour avoir de meilleurs résultats (sinon il n'y a pas de lancement de threads pour les premières mauvaises tuiles)
 //            if (board.verifyTile()) {
                 tilesUsed[index] = true;
-                cout << "Tile index : " << index << " est utilisée" << endl;
+                cout << "Tuile index : " << index << " est utilisée" << endl;
                 cout << "Cpt : " << cpt << endl;
                 threads[index] = thread(threadPoolLauncher, ref(finalBoard), board, tileIndex, tilesUsed,
                                         ref(resolved));
@@ -137,7 +134,6 @@ bool threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bo
             threads[i].join();
         }
     }
-    return false;
 }
 
 void threadPoolLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool& resolved) {
@@ -146,7 +142,6 @@ void threadPoolLauncher(Board& finalBoard, Board board, int tileIndex, vector<bo
         cpt--;
         return;
     } else {
-        Board boardX = board;
         if(threadsRecursiveResolver(finalBoard, board, tileIndex + 1, std::move(tilesUsed), resolved)) {
             cpt--;
             return;
@@ -166,6 +161,9 @@ bool threadsRecursiveResolver(Board& finalBoard, Board board, int tileIndex, vec
     }
 
     for (int i = 0; i < board.getListTiles().size(); i++) {
+        if(resolved) {
+            return false;
+        }
         if (!board.isTileUsed(tilesUsed, i)) {
             board.pushTile(i);
 
