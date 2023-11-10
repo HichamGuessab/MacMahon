@@ -10,6 +10,7 @@ class File {
 public:
     explicit File(string path);
     vector<string>readFile();
+    void setFileName(string fileName);
 private:
     string path = "../boardsTxt/";
 };

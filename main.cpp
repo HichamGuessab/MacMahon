@@ -24,6 +24,21 @@ const int MAX_THREADS = 5;
 
 int main(int argc, char** argv) {
     File fichier("4_4.txt");
+    switch (argv[1][0]) {
+        case '4':
+            fichier.setFileName("4_4.txt");
+            break;
+        case '5':
+            fichier.setFileName("5_5.txt");
+            break;
+        case '6':
+            fichier.setFileName("6_6.txt");
+            break;
+        default :
+            fichier.setFileName("4_4.txt");
+            break;
+    }
+
     vector<string> file = fichier.readFile();
 
     Board board(file);
@@ -34,16 +49,32 @@ int main(int argc, char** argv) {
     auto start = std::chrono::high_resolution_clock::now();
 
     bool resolved = false;
-    sequentialRecursiveResolver(finalBoard, 0, vector<bool>(tilesList.size()));
-//    threadsManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
-//    threadsPoolManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
+
+    switch (toupper(argv[2][0])) {
+        case 'S':
+            cout << "Sequential version" << endl;
+            sequentialRecursiveResolver(finalBoard, 0, vector<bool>(tilesList.size()));
+            break;
+        case 'T':
+            cout << "Threads version" << endl;
+            threadsManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
+            break;
+        case 'P':
+            cout << "Threads pool version" << endl;
+            threadsPoolManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
+            break;
+        default:
+            cout << "Sequential version" << endl;
+            sequentialRecursiveResolver(finalBoard, 0, vector<bool>(tilesList.size()));
+            break;
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
 
     finalBoard.display();
 
-    std::cout << "Temps d'éxecution: " << duration << " millisecondes" << std::endl;
+    std::cout << "Execution time : " << duration << " milliseconds" << std::endl;
 
     return 0;
 }
@@ -108,10 +139,11 @@ void threadLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> 
 void threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed) {
     cpt = 0;
     bool resolved = false;
+
+    // Correspond au nombre de tâches dans mon bassin
     int nbTiles = board.getListTiles().size();
     vector<thread> threads(nbTiles);
 
-    // Correspond au nombre de tâches dans mon bassin
     int index = 0;
     while (index < nbTiles && !resolved) {
         if(cpt < MAX_THREADS) {
