@@ -12,7 +12,9 @@ public:
     vector<string>readFile();
     void setFileName(string fileName);
 private:
-    string path = "../boardsTxt/";
+    string defaultPath = "/home/nas-wks01/users/uapv2102872/MacMahon/boardsTxt/";
+    string relativePath = "../boardsTxt/";
+    string path;
 };
 
 #endif // MACMAHON_FILE_H

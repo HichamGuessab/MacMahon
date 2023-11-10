@@ -23,5 +23,5 @@ vector<string> File::readFile() {
 }
 
 void File::setFileName(string fileName) {
-    this->path = "../boardsTxt/" + fileName;
+    this->path = this->defaultPath + fileName;
 }

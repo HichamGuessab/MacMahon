@@ -3,6 +3,7 @@
 #include <vector>
 #include <chrono>
 #include <thread>
+#include <atomic>
 
 #include "file/file.h"
 #include "board/tile/tile.h"
@@ -19,10 +20,13 @@ bool threadsRecursiveResolver(Board& finalBoard, Board board, int tileIndex, vec
 void threadsPoolManager(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed);
 void threadPoolLauncher(Board& finalBoard, Board board, int tileIndex, vector<bool> tilesUsed, bool& resolved);
 
-atomic<int> cpt = 0;
+atomic<int> cpt;
 const int MAX_THREADS = 5;
 
 int main(int argc, char** argv) {
+    if(argc == 1) {
+        cerr << "Aucun argument renseigné. Voir le README." << endl;
+    }
     File fichier("4_4.txt");
     switch (argv[1][0]) {
         case '4':
@@ -61,6 +65,7 @@ int main(int argc, char** argv) {
             break;
         case 'P':
             cout << "Threads pool version" << endl;
+            cpt = 0;
             threadsPoolManager(finalBoard, board, 0, vector<bool>(tilesList.size(), resolved));
             break;
         default:
